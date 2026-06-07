@@ -6,9 +6,9 @@ interface Props {
 }
 
 export const PrivateRoute: React.FC<Props> = ({ children }) => {
-    const isAuth = localStorage.getItem("auth");
+    const auth = sessionStorage.getItem("auth");
 
-    if (!isAuth) {
+    if (!auth) {
         return <Navigate to="/" replace />;
     }
 
