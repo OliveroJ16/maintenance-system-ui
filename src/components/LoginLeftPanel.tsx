@@ -12,8 +12,8 @@ export const LoginLeftPanel: React.FC = () => (
             </div>
         </div>
         <div className="welcome-text">
-            <h2>Bienvenido de nuevo</h2>
-            <p>Accede a tu sistema de gestión vehicular</p>
+            <h2>Bienvenido</h2>
+            <p>Accede a tu sistema de gestión vehicular y mantén el control total de tu flota</p>
         </div>
     </div>
 );
