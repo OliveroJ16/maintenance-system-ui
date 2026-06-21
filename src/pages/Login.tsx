@@ -30,13 +30,7 @@ export const Login: React.FC = () => {
                             Ingresa tus credenciales para continuar
                         </p>
                     </div>
-
-                    {errorMessage && (
-                        <div className="alert error">
-                            {errorMessage}
-                        </div>
-                    )}
-
+                    
                     <LoginForm
                         username={username}
                         password={password}
@@ -45,6 +39,16 @@ export const Login: React.FC = () => {
                         onPasswordChange={setPassword}
                         onSubmit={login}
                     />
+
+                    <div className="error-container-wrapper">
+                        {errorMessage ? (
+                            <div className="alert error">
+                                {errorMessage}
+                            </div>
+                        ) : (
+                            <div className="alert-placeholder">&nbsp;</div>
+                        )}
+                    </div>
 
                 </div>
 
