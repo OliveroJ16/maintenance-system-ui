@@ -36,3 +36,18 @@ export const showConfirmDeleteAlert = (
     cancelButtonText: 'Cancelar'
   });
 };
+
+
+export const showLogoutConfirmation = () => {
+  return Swal.fire({
+    title: '¿Cerrar sesión?',
+    text: 'Serás redirigido a la página de inicio de sesión',
+    icon: 'question',
+    showCancelButton: true,
+    confirmButtonColor: '#ef4444',
+    cancelButtonColor: '#64748b',
+    confirmButtonText: 'Sí, cerrar sesión',
+    cancelButtonText: 'Cancelar',
+    reverseButtons: true
+  });
+};
