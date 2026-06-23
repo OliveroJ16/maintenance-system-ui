@@ -108,6 +108,7 @@ export function useCrud<T extends Record<string, any>>(config: CrudConfig<T>) {
     handleOpenCreateModal,
     handleOpenEditModal,
     handleSubmit,
-    handleDelete
+    handleDelete,
+    fetchItems
   };
 }

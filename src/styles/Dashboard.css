@@ -33,6 +33,8 @@
   --border-table: #f1f5f9;
   
   /* Estados */
+   --status-mantenimiento-bg: #fef3c7;
+  --status-mantenimiento-text: #92400e;
   --status-activo-bg: #d1fae5;
   --status-activo-text: #065f46;
   --status-inactivo-bg: #fee2e2;
@@ -501,7 +503,6 @@ body {
   background: var(--btn-delete-color);
 }
 
-/* SOLUCIÓN: Escalar el SVG para que se vea más fino */
 .icon-btn svg {
   width: 30px;
   height: 30px;
@@ -509,7 +510,7 @@ body {
   transform-origin: center;
 }
 
-/* Override TOTAL de cualquier estilo inline */
+
 .icon-btn svg,
 .icon-btn svg *,
 .action-buttons svg,
@@ -749,6 +750,38 @@ tr:hover {
 /* ============================================
    9. BADGES DE ESTADO
    ============================================ */
+
+/* Badges de estado */
+.status-badge.activo {
+  background: var(--status-activo-bg);
+  color: var(--status-activo-text);
+}
+
+.status-badge.inactivo {
+  background: var(--status-inactivo-bg);
+  color: var(--status-inactivo-text);
+}
+
+.status-badge.mantenimiento {  /* ← NUEVO */
+  background: var(--status-mantenimiento-bg);
+  color: var(--status-mantenimiento-text);
+}
+
+.status-badge.pendiente {
+  background: var(--status-pendiente-bg);
+  color: var(--status-pendiente-text);
+}
+
+.status-badge.completado {
+  background: var(--status-completado-bg);
+  color: var(--status-completado-text);
+}
+
+.status-badge.en-progreso {
+  background: var(--status-progreso-bg);
+  color: var(--status-progreso-text);
+}
+
 .status-badge {
   display: inline-block;
   padding: 4px 12px;

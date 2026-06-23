@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { DriversSection } from '../components/DriversSection';
+import { VehiclesSection } from '../components/VehicleSection';
 import { showSuccessAlert, showErrorAlert, showLogoutConfirmation } from '../utils/alert';
 import { authService } from '../services/authService';
 
@@ -92,7 +93,7 @@ export function Dashboard() {
           {activeSection === 'drivers' && <DriversSection />}
           {activeSection === 'alerts' && <div>Contenido de Alertas/Dashboard</div>}
           {activeSection === 'users' && <div>Contenido de Usuarios</div>}
-          {activeSection === 'vehicles' && <div>Contenido de Vehículos</div>}
+          {activeSection === 'vehicles' && <VehiclesSection />}
         </div>
       </div>
     </div>

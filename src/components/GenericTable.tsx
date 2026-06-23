@@ -14,6 +14,7 @@ interface GenericTableProps<T> {
   onEdit: (item: T) => void;
   onDelete: (item: T) => void;
   idField: string;
+  renderActions?: (item: T) => React.ReactNode;
 }
 
 export function GenericTable<T extends Record<string, any>>({ 
@@ -21,7 +22,8 @@ export function GenericTable<T extends Record<string, any>>({
   columns, 
   onEdit, 
   onDelete,
-  idField
+  idField,
+  renderActions
 }: GenericTableProps<T>) {
   return (
     <div className="table-container">
@@ -44,6 +46,7 @@ export function GenericTable<T extends Record<string, any>>({
               ))}
               <td>
                 <div className="action-buttons">
+                  {renderActions && renderActions(item)}
                   <button
                     className="icon-btn edit"
                     onClick={() => onEdit(item)}
