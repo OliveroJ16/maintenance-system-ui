@@ -76,14 +76,25 @@ export function VehiclesSection() {
   };
 
   const handleOpenAssignModal = (vehicle: Vehicle) => {
+    const currentDriverId = vehicleDrivers.has(vehicle.idVehicle || 0) 
+      ? findDriverIdByName(vehicleDrivers.get(vehicle.idVehicle || 0) || '')
+      : '';
+
     setAssignData({
       vehicleId: vehicle.idVehicle || 0,
       vehiclePlate: vehicle.plate,
-      driverId: '',
+      driverId: currentDriverId,
       assignmentDate: new Date().toISOString().split('T')[0],
       hasDriver: vehicleDrivers.has(vehicle.idVehicle || 0)
     });
     setIsAssignModalOpen(true);
+  };
+
+  const findDriverIdByName = (driverName: string): string => {
+    const driver = drivers.find(d => 
+      `${d.firstName} ${d.lastName}` === driverName
+    );
+    return driver?.idDriver?.toString() || '';
   };
 
   const handleCloseAssignModal = () => {
@@ -105,52 +116,46 @@ export function VehiclesSection() {
   const handleAssignSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!assignData.driverId) {
-      showErrorAlert('Error', 'Debe seleccionar un conductor');
-      return;
-    }
-
-    const assignmentRequest: AssignmentRequest = {
-      vehicleId: assignData.vehicleId,
-      driverId: parseInt(assignData.driverId),
-      assignmentDate: assignData.assignmentDate
-    };
-
     try {
-      await api.post('/api/vehicle-assignments', assignmentRequest);
+      // Si seleccionó "Sin asignar" (driverId vacío)
+      if (!assignData.driverId || assignData.driverId === '') {
+        if (assignData.hasDriver) {
+          const result = await showConfirmDeleteAlert(
+            '¿Eliminar asignación?',
+            'Se quitará el conductor asignado a este vehículo.'
+          );
+          if (!result.isConfirmed) return;
+          
+          await api.delete(`/api/vehicle-assignments/${assignData.vehicleId}`);
+          showSuccessAlert('¡Eliminada!', 'La asignación ha sido eliminada.');
+        } else {
+          // No tenía conductor y sigue sin asignar, solo cerrar
+          handleCloseAssignModal();
+          return;
+        }
+      } else {
+        // Asignar o reasignar
+        const assignmentRequest: AssignmentRequest = {
+          vehicleId: assignData.vehicleId,
+          driverId: parseInt(assignData.driverId),
+          assignmentDate: assignData.assignmentDate
+        };
 
-      showSuccessAlert(
-        '¡Éxito!',
-        assignData.hasDriver 
-          ? 'La reasignación se completó correctamente.'
-          : 'La asignación se completó correctamente.'
-      );
+        await api.post('/api/vehicle-assignments', assignmentRequest);
+        showSuccessAlert(
+          '¡Éxito!',
+          assignData.hasDriver 
+            ? 'La reasignación se completó correctamente.'
+            : 'La asignación se completó correctamente.'
+        );
+      }
 
       handleCloseAssignModal();
       await refreshData();
     } catch (error: any) {
-      console.error('Error al asignar:', error);
-      const errorMsg = error.response?.data?.message || 'No se pudo completar la asignación.';
+      console.error('Error:', error);
+      const errorMsg = error.response?.data?.message || 'No se pudo completar la operación.';
       showErrorAlert('Error', errorMsg);
-    }
-  };
-
-  const handleRemoveAssignment = async (vehicleId: number) => {
-    const result = await showConfirmDeleteAlert(
-      '¿Eliminar asignación?',
-      'Se quitará el conductor asignado a este vehículo.'
-    );
-
-    if (result.isConfirmed) {
-      try {
-        await api.delete(`/api/vehicle-assignments/${vehicleId}`);
-        showSuccessAlert('¡Eliminada!', 'La asignación ha sido eliminada.');
-        await refreshData();
-      } catch (error: any) {
-        console.error('Error al eliminar asignación:', error);
-        const errorMsg = error.response?.data?.message || 'No se pudo eliminar la asignación.';
-        showErrorAlert('Error', errorMsg);
-      }
     }
   };
 
@@ -167,27 +172,10 @@ export function VehiclesSection() {
       render: (item: Vehicle) => {
         const driverName = vehicleDrivers.get(item.idVehicle || 0);
         
-        return (
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            {driverName ? (
-              <>
-                <span className="driver-badge">{driverName}</span>
-                <button
-                  className="icon-btn-small delete"
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    handleRemoveAssignment(item.idVehicle!);
-                  }}
-                  title="Eliminar asignación"
-                  style={{ padding: '2px 6px', fontSize: '12px' }}
-                >
-                  ×
-                </button>
-              </>
-            ) : (
-              <span className="no-driver">Sin asignar</span>
-            )}
-          </div>
+        return driverName ? (
+          <span className="driver-badge">{driverName}</span>
+        ) : (
+          <span className="no-driver">Sin asignar</span>
         );
       }
     },
@@ -320,15 +308,17 @@ export function VehiclesSection() {
                 <select 
                   name="driverId" 
                   value={assignData.driverId} 
-                  onChange={handleAssignInputChange} 
-                  required
+                  onChange={handleAssignInputChange}
                 >
-                  <option value="">Seleccione un conductor</option>
-                  {drivers.map(driver => (
-                    <option key={driver.idDriver} value={driver.idDriver}>
-                      {driver.firstName} {driver.lastName} - {driver.idCard}
-                    </option>
-                  ))}
+                  <option value="">Sin asignar</option>
+                  {drivers
+                    .filter(d => d.idDriver != null)
+                    .map(driver => (
+                      <option key={driver.idDriver} value={driver.idDriver}>
+                        {driver.firstName} {driver.lastName} - {driver.idCard}
+                      </option>
+                    ))
+                  }
                 </select>
               </div>
 

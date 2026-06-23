@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { DriversSection } from '../components/DriversSection';
 import { VehiclesSection } from '../components/VehicleSection';
+import { UsersSection } from '../components/UsersSection';
 import { showSuccessAlert, showErrorAlert, showLogoutConfirmation } from '../utils/alert';
 import { authService } from '../services/authService';
 
@@ -92,7 +93,7 @@ export function Dashboard() {
         <div className="content-area">
           {activeSection === 'drivers' && <DriversSection />}
           {activeSection === 'alerts' && <div>Contenido de Alertas/Dashboard</div>}
-          {activeSection === 'users' && <div>Contenido de Usuarios</div>}
+          {activeSection === 'users' && <UsersSection />}
           {activeSection === 'vehicles' && <VehiclesSection />}
         </div>
       </div>
