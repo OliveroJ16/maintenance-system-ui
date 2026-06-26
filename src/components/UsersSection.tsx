@@ -33,7 +33,7 @@ const USER_CONFIG = {
 
 export function UsersSection() {
   const crud = useCrud<UserFormData>(USER_CONFIG);
-  
+
   const [drivers, setDrivers] = useState<Driver[]>([]);
 
   useEffect(() => {
@@ -91,8 +91,8 @@ export function UsersSection() {
     { key: 'username', header: 'Usuario' },
     { key: 'firstName', header: 'Nombre' },
     { key: 'lastName', header: 'Apellido' },
-    { 
-      key: 'role', 
+    {
+      key: 'role',
       header: 'Rol',
       render: (item: UserFormData) => (
         <span className={`status-badge ${item.role === 'ADMINISTRADOR' ? 'activo' : 'inactivo'}`}>
@@ -101,31 +101,29 @@ export function UsersSection() {
       )
     },
     { key: 'email', header: 'Email' },
-    { 
-  key: 'driver', 
-  header: 'Chofer',
-  render: (item: any) => (
-    item.driver?.firstName ? (
-      <span className="driver-badge">
-        {item.driver.firstName} {item.driver.lastName}
-      </span>
-    ) : (
-      <span className="no-driver">Sin asignar</span>
-    )
-  )
-},
-    { 
-      key: 'registrationDate', 
+    {
+      key: 'driver',
+      header: 'Chofer',
+      render: (item: any) => (
+        item.driver?.firstName ? (
+          <span className="driver-badge">
+            {item.driver.firstName} {item.driver.lastName}
+          </span>
+        ) : (
+          <span className="no-driver">Sin asignar</span>
+        )
+      )
+    },
+    {
+      key: 'registrationDate',
       header: 'Fecha Registro',
       render: (item: UserFormData) => (
-        (item as any).registrationDate 
-          ? new Date((item as any).registrationDate).toLocaleString('es-PA', {
-              day: '2-digit',
-              month: '2-digit',
-              year: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit'
-            })
+        (item as any).registrationDate
+          ? new Date((item as any).registrationDate).toLocaleDateString('es-PA', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric'
+          })
           : '-'
       )
     }
@@ -146,9 +144,9 @@ export function UsersSection() {
     { name: 'password', label: 'Contraseña', type: 'text' as const, placeholder: 'Contraseña' },
     { name: 'firstName', label: 'Nombre', type: 'text' as const, placeholder: 'Ej: Juan' },
     { name: 'lastName', label: 'Apellido', type: 'text' as const, placeholder: 'Ej: Pérez' },
-    { 
-      name: 'role', 
-      label: 'Rol', 
+    {
+      name: 'role',
+      label: 'Rol',
       type: 'select' as const,
       options: [
         { value: 'ADMINISTRADOR', label: 'Administrador' },
@@ -156,9 +154,9 @@ export function UsersSection() {
       ]
     },
     { name: 'email', label: 'Email', type: 'email' as const, placeholder: 'Ej: juan@correo.com' },
-    { 
-      name: 'driver.idDriver', 
-      label: 'Chofer Asignado', 
+    {
+      name: 'driver.idDriver',
+      label: 'Chofer Asignado',
       type: 'select' as const,
       options: driverOptions
     }
@@ -168,9 +166,9 @@ export function UsersSection() {
     { name: 'username', label: 'Nombre de Usuario', type: 'text' as const, placeholder: 'Ej: juan123' },
     { name: 'firstName', label: 'Nombre', type: 'text' as const, placeholder: 'Ej: Juan' },
     { name: 'lastName', label: 'Apellido', type: 'text' as const, placeholder: 'Ej: Pérez' },
-    { 
-      name: 'role', 
-      label: 'Rol', 
+    {
+      name: 'role',
+      label: 'Rol',
       type: 'select' as const,
       options: [
         { value: 'ADMINISTRADOR', label: 'Administrador' },
@@ -178,9 +176,9 @@ export function UsersSection() {
       ]
     },
     { name: 'email', label: 'Email', type: 'email' as const, placeholder: 'Ej: juan@correo.com' },
-    { 
-      name: 'driver.idDriver', 
-      label: 'Chofer Asignado', 
+    {
+      name: 'driver.idDriver',
+      label: 'Chofer Asignado',
       type: 'select' as const,
       options: driverOptions
     }
@@ -200,7 +198,7 @@ export function UsersSection() {
           </button>
         </div>
 
-        <SearchBar 
+        <SearchBar
           value={crud.searchTerm}
           onChange={e => crud.setSearchTerm(e.target.value)}
           placeholder="Buscar usuario..."

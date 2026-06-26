@@ -3,6 +3,7 @@ import { GenericTable } from './GenericTable';
 import { GenericModal } from './GenericModal';
 import { SearchBar } from './SearchBar';
 import type { Driver } from '../types/driver';
+import PlusIcon from '../assets/icons/plus.svg?react';
 
 const DRIVER_CONFIG = {
   endpoint: 'drivers',
@@ -82,6 +83,7 @@ export function DriversSection() {
             <p>Consultar, registrar y administrar choferes</p>
           </div>
           <button className="btn btn-primary" onClick={crud.handleOpenCreateModal}>
+            <PlusIcon />
             Nuevo Chofer
           </button>
         </div>
