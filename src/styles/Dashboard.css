@@ -639,8 +639,10 @@ body {
 }
 
 .form-group textarea {
-  resize: vertical;
-  min-height: 80px;
+  resize: none;
+  min-height: 56px;
+  height: 56px;
+  max-height: 56px;
 }
 
 .form-group input:focus,
@@ -723,6 +725,15 @@ body {
   padding: 7px 10px;
   font-size: 13px;
   border-radius: 6px;
+}
+
+.modal-content .form-group textarea {
+  resize: none;
+  min-height: 48px;
+  height: 48px;
+  max-height: 48px;
+  padding: 6px 10px;
+  font-size: 13px;
 }
 
 .modal-content .form-actions {

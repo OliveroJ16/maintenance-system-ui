@@ -3,10 +3,12 @@ import React from 'react';
 interface Field {
   name: string;
   label: string;
-  type: 'text' | 'email' | 'select' | 'date' | 'number';
+  type: 'text' | 'email' | 'select' | 'date' | 'number' | 'textarea';
   placeholder?: string;
   options?: readonly { value: string; label: string }[];
   fullWidth?: boolean;
+  required?: boolean;
+  rows?: number;
 }
 
 interface GenericModalProps {
@@ -15,7 +17,7 @@ interface GenericModalProps {
   title: string;
   fields?: readonly Field[];  
   formData?: any; 
-  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => void; 
+  onChange?: (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => void; 
   onSubmit?: (e: React.FormEvent) => void;  
   isEditing?: boolean;
   maxWidth?: string;
@@ -59,14 +61,28 @@ export function GenericModal({
                   key={field.name} 
                   className={`form-group ${field.fullWidth ? 'full-width' : ''}`}
                 >
-                  <label>{field.label}</label>
+                  <label>
+                    {field.label}
+                    {field.required && <span style={{ color: 'red' }}> *</span>}
+                  </label>
                   
-                  {field.type === 'select' ? (
+                  {field.type === 'textarea' ? (
+                    <textarea
+                      name={field.name}
+                      value={formData[field.name] || ''}
+                      onChange={onChange}
+                      placeholder={field.placeholder}
+                      rows={field.rows || 3}
+                      required={field.required}
+                    />
+                  ) : field.type === 'select' ? (
                     <select
                       name={field.name}
-                      value={formData[field.name]}
+                      value={formData[field.name] || ''}
                       onChange={onChange}
+                      required={field.required}
                     >
+                      <option value="">Seleccionar...</option>
                       {field.options?.map(opt => (
                         <option key={opt.value} value={opt.value}>
                           {opt.label}
@@ -77,9 +93,10 @@ export function GenericModal({
                     <input
                       type={field.type}
                       name={field.name}
-                      value={formData[field.name]}
+                      value={formData[field.name] || ''}
                       onChange={onChange}
                       placeholder={field.placeholder}
+                      required={field.required}
                     />
                   )}
                 </div>

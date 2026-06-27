@@ -3,6 +3,7 @@ import { DriversSection } from '../components/DriversSection';
 import { VehiclesSection } from '../components/VehicleSection';
 import { UsersSection } from '../components/UsersSection';
 import { WorkshopsSection } from '../components/WorkshopSection';
+import { MaintenanceSection } from '../components/MaintenanceSection';
 import { showSuccessAlert, showErrorAlert, showLogoutConfirmation } from '../utils/alert';
 import { authService } from '../services/authService';
 
@@ -12,6 +13,8 @@ import UsersIcon from '../assets/icons/users-icon.svg?react';
 import DriversIcon from '../assets/icons/drivers-icon.svg?react';
 import VehiclesIcon from '../assets/icons/vehicles-icon.svg?react';
 import WorkshopIcon from '../assets/icons/workshop-icon.svg?react';
+import MaintenanceIcon from '../assets/icons/maintenance-icon.svg?react';
+import ReportsIcon from '../assets/icons/reports-icon.svg?react';
 import LogoutIcon from '../assets/icons/logout-icon.svg?react';
 
 const handleLogout = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -83,6 +86,16 @@ export function Dashboard() {
             <WorkshopIcon />
             <span>Talleres</span>
           </div>
+
+          <div className={`menu-item ${activeSection === 'maintenance' ? 'active' : ''}`} onClick={() => setActiveSection('maintenance')}>
+            <MaintenanceIcon />
+            <span>Mantenimientos</span>
+          </div>
+
+          <div className={`menu-item ${activeSection === 'reports' ? 'active' : ''}`} onClick={() => setActiveSection('reports')}>
+            <ReportsIcon />
+            <span>Historial y Reportes</span>
+          </div>
         </div>
 
         <div className="logout-section">
@@ -97,11 +110,13 @@ export function Dashboard() {
 
       <div className="main-content">
         <div className="content-area">
-          {activeSection === 'drivers' && <DriversSection />}
           {activeSection === 'alerts' && <div>Contenido de Alertas/Dashboard</div>}
           {activeSection === 'users' && <UsersSection />}
+          {activeSection === 'drivers' && <DriversSection />}
           {activeSection === 'vehicles' && <VehiclesSection />}
           {activeSection === 'workshop' && <WorkshopsSection />}
+          {activeSection === 'maintenance' && <MaintenanceSection />}
+          {activeSection === 'reports' && <div>Contenido de Historial y Reportes</div>}
         </div>
       </div>
     </div>

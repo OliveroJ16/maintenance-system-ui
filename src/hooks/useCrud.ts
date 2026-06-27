@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { api } from '../services/api';
 import { showSuccessAlert, showConfirmDeleteAlert, showErrorAlert } from '../utils/alert';
 
@@ -17,23 +17,32 @@ export function useCrud<T extends Record<string, any>>(config: CrudConfig<T>) {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingItem, setEditingItem] = useState<T | null>(null);
   const [formData, setFormData] = useState<T>(config.initialFormData);
+  const [loading, setLoading] = useState(false);
 
-  const fetchItems = async () => {
+  const fetchItems = useCallback(async () => {
+    setLoading(true);
     try {
       const response = await api.get(`/api/${config.endpoint}`);
       setItems(response.data);
     } catch (error) {
       showErrorAlert('Error', `No se pudieron cargar los ${config.entityName}s`);
+    } finally {
+      setLoading(false);
     }
-  };
+  }, [config.endpoint, config.entityName]);
 
   useEffect(() => {
     fetchItems();
-  }, []);
+  }, [fetchItems]);
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
+    const { name, value, type } = e.target;
+    
+    if (type === 'number') {
+      setFormData(prev => ({ ...prev, [name]: value === '' ? '' : Number(value) }));
+    } else {
+      setFormData(prev => ({ ...prev, [name]: value }));
+    }
   };
 
   const handleOpenCreateModal = () => {
@@ -44,7 +53,20 @@ export function useCrud<T extends Record<string, any>>(config: CrudConfig<T>) {
 
   const handleOpenEditModal = (item: T) => {
     setEditingItem(item);
-    setFormData(item);
+    
+    const editData: Record<string, any> = { ...item };
+    
+    Object.keys(editData).forEach(key => {
+      const value = editData[key];
+      if (value && typeof value === 'object' && value !== null) {
+        const nestedId = Object.keys(value).find(k => k.startsWith('id') || k.toLowerCase().includes('id'));
+        if (nestedId) {
+          editData[key] = value[nestedId]?.toString();
+        }
+      }
+    });
+    
+    setFormData(editData as T);
     setIsModalOpen(true);
   };
 
@@ -54,7 +76,8 @@ export function useCrud<T extends Record<string, any>>(config: CrudConfig<T>) {
 
     try {
       if (isEditing && editingItem) {
-        await api.put(`/api/${config.endpoint}/${editingItem[idField]}`, formData);
+        const itemId = (editingItem as Record<string, any>)[idField];
+        await api.put(`/api/${config.endpoint}/${itemId}`, formData);
       } else {
         await api.post(`/api/${config.endpoint}`, formData);
       }
@@ -66,8 +89,9 @@ export function useCrud<T extends Record<string, any>>(config: CrudConfig<T>) {
 
       setIsModalOpen(false);
       fetchItems();
-    } catch (error) {
-      showErrorAlert('Error', 'Error de conexión con el servidor.');
+    } catch (error: any) {
+      const errorMsg = error.response?.data?.message || 'Error de conexión con el servidor.';
+      showErrorAlert('Error', errorMsg);
     }
   };
 
@@ -79,33 +103,52 @@ export function useCrud<T extends Record<string, any>>(config: CrudConfig<T>) {
 
     if (result.isConfirmed) {
       try {
-        await api.delete(`/api/${config.endpoint}/${item[idField]}`);
+        const itemId = (item as Record<string, any>)[idField];
+        await api.delete(`/api/${config.endpoint}/${itemId}`);
         showSuccessAlert('¡Eliminado!', `El ${config.entityName} ha sido eliminado.`);
         fetchItems();
-      } catch (error) {
-        showErrorAlert('Error', `No se pudo eliminar al ${config.entityName}.`);
+      } catch (error: any) {
+        const errorMsg = error.response?.data?.message || `No se pudo eliminar al ${config.entityName}.`;
+        showErrorAlert('Error', errorMsg);
       }
     }
   };
 
-  const filteredItems = items.filter((item: any) =>
-    Object.values(item).some(
-      value => 
-        value && 
-        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const filteredItems = items.filter((item: T) => {
+    if (!searchTerm) return true;
+    
+    const searchLower = searchTerm.toLowerCase();
+    const itemRecord = item as Record<string, any>;
+    
+    return Object.values(itemRecord).some(value => {
+      if (value === null || value === undefined) return false;
+      
+      if (typeof value === 'string' || typeof value === 'number') {
+        return value.toString().toLowerCase().includes(searchLower);
+      }
+      
+      if (typeof value === 'object') {
+        return Object.values(value).some(nestedValue => {
+          if (typeof nestedValue === 'string' || typeof nestedValue === 'number') {
+            return nestedValue.toString().toLowerCase().includes(searchLower);
+          }
+          return false;
+        });
+      }
+      
+      return false;
+    });
+  });
 
   return {
     items: filteredItems,
+    loading,
     searchTerm,
     setSearchTerm,
     isModalOpen,
     setIsModalOpen,
     editingItem,
-    setEditingItem, 
     formData,
-    setFormData, 
     handleInputChange,
     handleOpenCreateModal,
     handleOpenEditModal,
