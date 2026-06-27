@@ -4,6 +4,7 @@ import { VehiclesSection } from '../components/VehicleSection';
 import { UsersSection } from '../components/UsersSection';
 import { WorkshopsSection } from '../components/WorkshopSection';
 import { MaintenanceSection } from '../components/MaintenanceSection';
+import { ReportsSection } from '../components/ReportsSection';
 import { showSuccessAlert, showErrorAlert, showLogoutConfirmation } from '../utils/alert';
 import { authService } from '../services/authService';
 
@@ -116,7 +117,7 @@ export function Dashboard() {
           {activeSection === 'vehicles' && <VehiclesSection />}
           {activeSection === 'workshop' && <WorkshopsSection />}
           {activeSection === 'maintenance' && <MaintenanceSection />}
-          {activeSection === 'reports' && <div>Contenido de Historial y Reportes</div>}
+          {activeSection === 'reports' && <ReportsSection />}
         </div>
       </div>
     </div>
