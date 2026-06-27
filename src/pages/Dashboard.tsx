@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { DriversSection } from '../components/DriversSection';
 import { VehiclesSection } from '../components/VehicleSection';
 import { UsersSection } from '../components/UsersSection';
+import { WorkshopsSection } from '../components/WorkshopSection';
 import { showSuccessAlert, showErrorAlert, showLogoutConfirmation } from '../utils/alert';
 import { authService } from '../services/authService';
 
@@ -10,6 +11,7 @@ import DashboardIcon from '../assets/icons/dashboard-icon.svg?react';
 import UsersIcon from '../assets/icons/users-icon.svg?react';
 import DriversIcon from '../assets/icons/drivers-icon.svg?react';
 import VehiclesIcon from '../assets/icons/vehicles-icon.svg?react';
+import WorkshopIcon from '../assets/icons/workshop-icon.svg?react';
 import LogoutIcon from '../assets/icons/logout-icon.svg?react';
 
 const handleLogout = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -41,11 +43,10 @@ const handleLogout = async (e: React.FormEvent<HTMLFormElement>) => {
 };
 
 export function Dashboard() {
-  const [activeSection, setActiveSection] = useState<string>('drivers');
+  const [activeSection, setActiveSection] = useState<string>('dashboard');
 
   return (
     <div style={{ display: 'flex', minHeight: '100vh', width: '100%' }}>
-      {/* SIDEBAR */}
       <div className="sidebar">
         <div className="logo-section">
           <div className="logo-icon">
@@ -77,6 +78,11 @@ export function Dashboard() {
             <VehiclesIcon />
             <span>Vehículos</span>
           </div>
+
+          <div className={`menu-item ${activeSection === 'workshop' ? 'active' : ''}`} onClick={() => setActiveSection('workshop')}>
+            <WorkshopIcon />
+            <span>Talleres</span>
+          </div>
         </div>
 
         <div className="logout-section">
@@ -95,6 +101,7 @@ export function Dashboard() {
           {activeSection === 'alerts' && <div>Contenido de Alertas/Dashboard</div>}
           {activeSection === 'users' && <UsersSection />}
           {activeSection === 'vehicles' && <VehiclesSection />}
+          {activeSection === 'workshop' && <WorkshopsSection />}
         </div>
       </div>
     </div>
