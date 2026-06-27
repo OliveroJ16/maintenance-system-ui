@@ -5,6 +5,7 @@ import { UsersSection } from '../components/UsersSection';
 import { WorkshopsSection } from '../components/WorkshopSection';
 import { MaintenanceSection } from '../components/MaintenanceSection';
 import { ReportsSection } from '../components/ReportsSection';
+import { DashboardSection } from '../components/DashboardSection';
 import { showSuccessAlert, showErrorAlert, showLogoutConfirmation } from '../utils/alert';
 import { authService } from '../services/authService';
 
@@ -63,37 +64,58 @@ export function Dashboard() {
         </div>
 
         <div className="menu-section">
-          <div className={`menu-item ${activeSection === 'alerts' ? 'active' : ''}`} onClick={() => setActiveSection('alerts')}>
+          <div 
+            className={`menu-item ${activeSection === 'dashboard' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('dashboard')}
+          >
             <DashboardIcon />
             <span>Dashboard</span>
           </div>
 
-          <div className={`menu-item ${activeSection === 'users' ? 'active' : ''}`} onClick={() => setActiveSection('users')}>
+          <div 
+            className={`menu-item ${activeSection === 'users' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('users')}
+          >
             <UsersIcon />
             <span>Usuarios</span>
           </div>
 
-          <div className={`menu-item ${activeSection === 'drivers' ? 'active' : ''}`} onClick={() => setActiveSection('drivers')}>
+          <div 
+            className={`menu-item ${activeSection === 'drivers' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('drivers')}
+          >
             <DriversIcon />
             <span>Choferes</span>
           </div>
 
-          <div className={`menu-item ${activeSection === 'vehicles' ? 'active' : ''}`} onClick={() => setActiveSection('vehicles')}>
+          <div 
+            className={`menu-item ${activeSection === 'vehicles' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('vehicles')}
+          >
             <VehiclesIcon />
             <span>Vehículos</span>
           </div>
 
-          <div className={`menu-item ${activeSection === 'workshop' ? 'active' : ''}`} onClick={() => setActiveSection('workshop')}>
+          <div 
+            className={`menu-item ${activeSection === 'workshop' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('workshop')}
+          >
             <WorkshopIcon />
             <span>Talleres</span>
           </div>
 
-          <div className={`menu-item ${activeSection === 'maintenance' ? 'active' : ''}`} onClick={() => setActiveSection('maintenance')}>
+          <div 
+            className={`menu-item ${activeSection === 'maintenance' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('maintenance')}
+          >
             <MaintenanceIcon />
             <span>Mantenimientos</span>
           </div>
 
-          <div className={`menu-item ${activeSection === 'reports' ? 'active' : ''}`} onClick={() => setActiveSection('reports')}>
+          <div 
+            className={`menu-item ${activeSection === 'reports' ? 'active' : ''}`} 
+            onClick={() => setActiveSection('reports')}
+          >
             <ReportsIcon />
             <span>Historial y Reportes</span>
           </div>
@@ -110,8 +132,8 @@ export function Dashboard() {
       </div>
 
       <div className="main-content">
-        <div className="content-area">
-          {activeSection === 'alerts' && <div>Contenido de Alertas/Dashboard</div>}
+        <div className="content-area" style={{ padding: 0 }}>
+          {activeSection === 'dashboard' && <DashboardSection />}
           {activeSection === 'users' && <UsersSection />}
           {activeSection === 'drivers' && <DriversSection />}
           {activeSection === 'vehicles' && <VehiclesSection />}
