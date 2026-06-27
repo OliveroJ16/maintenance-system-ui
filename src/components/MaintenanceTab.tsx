@@ -23,24 +23,36 @@ const MAINTENANCE_CONFIG = {
 };
 
 const MAINTENANCE_COLUMNS = [
-  { key: 'scheduledDate', header: 'Fecha Programada' },
-  { key: 'scheduledKm', header: 'KM Programado' },
+  { 
+    key: 'scheduledDate', 
+    header: 'Fecha Prog.',
+    render: (item: Maintenance) => item.scheduledDate 
+      ? new Date(item.scheduledDate).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }) 
+      : '—'
+  },
+  { 
+    key: 'scheduledKm', 
+    header: 'KM Prog.',
+    render: (item: Maintenance) => item.scheduledKm?.toLocaleString() || '—'
+  },
   { 
     key: 'executionDate', 
-    header: 'Fecha Ejecución',
-    render: (item: Maintenance) => item.executionDate || '—'
+    header: 'Fecha Ejec.',
+    render: (item: Maintenance) => item.executionDate 
+      ? new Date(item.executionDate).toLocaleDateString('es-ES', { day: '2-digit', month: '2-digit', year: '2-digit' }) 
+      : '—'
   },
   { 
     key: 'executionKm', 
-    header: 'KM Ejecución',
-    render: (item: Maintenance) => item.executionKm || '—'
+    header: 'KM Ejec.',
+    render: (item: Maintenance) => item.executionKm?.toLocaleString() || '—'
   },
   { 
     key: 'status', 
     header: 'Estado',
     render: (item: Maintenance) => (
       <span className={`status-badge ${item.status.toLowerCase()}`}>
-        {item.status.replace('_', ' ')}
+        {item.status === 'EN_PROCESO' ? 'En proceso' : item.status.charAt(0) + item.status.slice(1).toLowerCase()}
       </span>
     )
   },
@@ -51,7 +63,7 @@ const MAINTENANCE_COLUMNS = [
   },
   { 
     key: 'maintenanceType', 
-    header: 'Tipo Mantenimiento',
+    header: 'Tipo Man.',
     render: (item: Maintenance) => item.maintenanceType?.typeName || '—'
   },
   { 

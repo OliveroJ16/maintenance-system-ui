@@ -1181,3 +1181,94 @@ td:last-child {
 ::-webkit-scrollbar-thumb:hover {
   background: #091e30;
 }
+
+/* ============================================
+   ESTILOS PARA TABS DE NAVEGACIÓN - UNIDOS A TABLA
+   ============================================ */
+.tabs-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 0;
+  padding: 6px;
+  background: var(--bg-white);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  box-shadow: 0 -1px 3px rgba(9, 30, 48, 0.04);
+  width: 100%;
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  background: transparent;
+  color: var(--text-secondary);
+  position: relative;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+}
+
+.tab-btn:hover {
+  color: var(--text-primary);
+  background: var(--bg-table-hover);
+}
+
+.tab-btn.active {
+  background: linear-gradient(135deg, #0f2f46 0%, #091e30 100%);
+  color: var(--text-white);
+  box-shadow: 0 2px 8px rgba(9, 30, 48, 0.25);
+  font-weight: 600;
+}
+
+.tab-btn:active {
+  transform: scale(0.98);
+}
+
+.tab-content {
+  margin-top: 0;
+}
+
+/* Unir tabs con el contenido de abajo */
+.tab-content .section-card {
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+  margin-top: 0;
+  box-shadow: var(--shadow-sm);
+}
+
+.tab-content .table-container {
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
+}
+
+/* Eliminar cualquier margen de elementos dentro del tab-content */
+.tab-content > * {
+  margin-top: 0 !important;
+}
+
+.tab-content .section-card {
+  border-top: none;
+}
+
+.tab-content .search-bar {
+  margin-top: 0;
+}
+
+/* Ajuste responsive */
+@media (max-width: 768px) {
+  .tabs-container {
+    flex-direction: column;
+    gap: 4px;
+  }
+  
+  .tab-btn {
+    flex: none;
+    width: 100%;
+  }
+}
