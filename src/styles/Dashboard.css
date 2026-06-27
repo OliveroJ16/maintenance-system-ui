@@ -782,6 +782,18 @@ tr:hover {
   background: var(--bg-table-hover);
 }
 
+th:last-child, 
+td:last-child {
+  text-align: center;
+}
+
+.action-buttons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px; 
+}
+
 /* ============================================
    9. BADGES DE ESTADO
    ============================================ */

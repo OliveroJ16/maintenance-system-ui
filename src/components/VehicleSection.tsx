@@ -9,7 +9,7 @@ import AssignDriverIcon from '../assets/icons/assign-driver.svg?react';
 import PlusIcon from '../assets/icons/plus.svg?react';
 import type { Vehicle } from '../types/vehicle';
 import type { Driver } from '../types/driver';
-import type { AssignmentRequest } from '../types/AssignmentRequest';
+import type { AssignmentRequest } from '../types/assignmentRequest';
 
 const VEHICLE_CONFIG = {
   endpoint: 'vehicles',
